@@ -18,11 +18,16 @@
         /// <summary>
         /// 获取或设置数据类型
         /// </summary>
-        public VarType VarType { get; set; }
+        public string? DataType { get; set; }
 
         /// <summary>
-        /// 获取或设置变量类型名称
+        /// 获取或设置起始地址
         /// </summary>
-        public string? VarTypeName { get; set; }
+        public int StartAddress { get; set; }
+
+        /// <summary>
+        /// 获取或设置位号
+        /// </summary>
+        public int BitNumber { get; set; }
     }
 }
