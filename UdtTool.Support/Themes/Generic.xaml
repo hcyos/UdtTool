@@ -1,0 +1,10 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/UdtTool.Support;component/Themes/Units/DataBlockTreeView.xaml" />
+        <ResourceDictionary Source="/UdtTool.Support;component/Themes/Units/DataBlockTreeViewItem.xaml" />
+        <ResourceDictionary Source="/UdtTool.Support;component/Themes/Units/ChevronSwitch.xaml" />
+        <ResourceDictionary Source="/UdtTool.Support;component/Themes/Units/DataBlockTabControl.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+</ResourceDictionary>

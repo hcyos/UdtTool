@@ -3,9 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34202.233
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UdtTool", "UdtTool\UdtTool.csproj", "{99E956D9-4DE4-4A5F-BCE9-C50767060406}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UdtTool", "UdtTool\UdtTool.csproj", "{99E956D9-4DE4-4A5F-BCE9-C50767060406}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UdtTool.Core", "UdtTool.Core\UdtTool.Core.csproj", "{5F6E2AF9-606B-4213-94EE-BB783A5D07D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UdtTool.Core", "UdtTool.Core\UdtTool.Core.csproj", "{5F6E2AF9-606B-4213-94EE-BB783A5D07D9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UdtTool.Support", "UdtTool.Support\UdtTool.Support.csproj", "{49A4327B-459C-42E6-AA15-B1C080F6A0FD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "解决方案项", "解决方案项", "{62E3EEA9-109E-48D7-9C0A-35E239B09563}"
+	ProjectSection(SolutionItems) = preProject
+		.csharpierrc.json = .csharpierrc.json
+		Directory.Packages.props = Directory.Packages.props
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UdtTool.Service", "UdtTool.Service\UdtTool.Service.csproj", "{96128ED1-AADF-48ED-AB04-DBF85FE8521E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UdtTool.Service.UnitTest", "UdtTool.Service.UnitTest\UdtTool.Service.UnitTest.csproj", "{24D20955-077F-4BB1-98FA-98DDA895EC1A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +33,18 @@ Global
 		{5F6E2AF9-606B-4213-94EE-BB783A5D07D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F6E2AF9-606B-4213-94EE-BB783A5D07D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F6E2AF9-606B-4213-94EE-BB783A5D07D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49A4327B-459C-42E6-AA15-B1C080F6A0FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49A4327B-459C-42E6-AA15-B1C080F6A0FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49A4327B-459C-42E6-AA15-B1C080F6A0FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49A4327B-459C-42E6-AA15-B1C080F6A0FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96128ED1-AADF-48ED-AB04-DBF85FE8521E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96128ED1-AADF-48ED-AB04-DBF85FE8521E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96128ED1-AADF-48ED-AB04-DBF85FE8521E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96128ED1-AADF-48ED-AB04-DBF85FE8521E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24D20955-077F-4BB1-98FA-98DDA895EC1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24D20955-077F-4BB1-98FA-98DDA895EC1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24D20955-077F-4BB1-98FA-98DDA895EC1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24D20955-077F-4BB1-98FA-98DDA895EC1A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

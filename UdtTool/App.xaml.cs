@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
+using CommunityToolkit.Mvvm.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
+using MvvmDialogs;
+using UdtTool.Service;
+using UdtTool.ViewModels;
+using UdtTool.Views;
 
 namespace UdtTool
 {
@@ -13,5 +13,21 @@ namespace UdtTool
     /// </summary>
     public partial class App : Application
     {
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+
+            Ioc.Default.ConfigureServices(
+                new ServiceCollection()
+                    .AddSingleton<MainWindowViewModel>()
+                    .AddSingleton<IDialogService, DialogService>()
+                    .AddSingleton<IParserService, ParserService>()
+                    .AddSingleton<IPlatformVariableGenerator, InoTouchPadVariableGenerator>()
+                    .BuildServiceProvider()
+            );
+
+            var mainWindow = new MainWindow { DataContext = Ioc.Default.GetRequiredService<MainWindowViewModel>() };
+            mainWindow.Show();
+        }
     }
 }

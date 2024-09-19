@@ -1,0 +1,159 @@
+﻿TYPE "typeCylinderTime"
+VERSION : 0.1
+   STRUCT
+      Open : Time;
+      Close : Time;
+   END_STRUCT;
+
+END_TYPE
+
+TYPE "typeDriveSpeedCfg"
+VERSION : 0.1
+   STRUCT
+      MaxVelocity : Real := 44.0;   // 驱动器50Hz时对应的速度
+      FwdFastVelocity : Real := 40.0;   // 驱动器快速正转对应的速度
+      FwdSlowVelocity : Real := 20.0;   // 驱动器慢速正转对应的速度
+      RevFastVelocity : Real := 20.0;   // 驱动器快速反转对应的速度
+      RevSlowVelocity : Real := 10.0;   // 驱动器慢速反转对应的速度
+   END_STRUCT;
+
+END_TYPE
+
+TYPE "typeSensorCfg"
+VERSION : 0.1
+   STRUCT
+      OnFilter : Time := T#50ms;   // 接通动作时间
+      OffFilter : Time := T#50ms;   // 断开动作时间
+   END_STRUCT;
+
+END_TYPE
+
+TYPE "typeParameter"
+VERSION : 0.1
+   STRUCT
+      StationTimeOut : Time := T#10s;   // 输送产品的超时时间
+      StationTransitionTime : Time := T#1s;   // 移交产品的过渡时间,
+      PackageAlignmentTime : Time;   // 包裹对齐时间
+      RollerSpeed { S7_SetPoint := 'False'} : "typeDriveSpeedCfg";   // 滚筒速度
+      BeltSpeed { S7_SetPoint := 'False'} : "typeDriveSpeedCfg";   // 皮带速度
+      FilpSpeed { S7_SetPoint := 'False'} : "typeDriveSpeedCfg";   // 翻盖速度
+      BeltCylinderActionTime { S7_SetPoint := 'False'} : "typeCylinderTime";   // 皮带气缸时间
+      BeltCylinderTimeout { S7_SetPoint := 'False'} : "typeCylinderTime";   // 皮带气缸超时时间
+      B1_Sensor : "typeSensorCfg";   // 直辊减速传感器
+      B2_Sensor : "typeSensorCfg";   // 直辊缓传感器
+      B3_Sensor : "typeSensorCfg";   // 同步带减速传感器
+      B4_Sensor : "typeSensorCfg";   // 同步带缓存传感器
+      B5_Sensor : "typeSensorCfg";   // 激光位移传感器
+      B6_Sensor : "typeSensorCfg";
+      B7_Sensor : "typeSensorCfg";
+      B8_Sensor : "typeSensorCfg";
+      "Type" { S7_SetPoint := 'True'} : Int;
+   END_STRUCT;
+
+END_TYPE
+
+TYPE "typeParameterAndOperation"
+VERSION : 0.1
+   STRUCT
+      Parameter { S7_SetPoint := 'False'} : "typeParameter";
+      OpCmds : DWord;
+      SelectedIndex : Int;   // 工作变量 触摸屏当前选择的页面
+      OldSelectedIndex : Int;   // 工作变量 不需要修改
+      IndexUpper : Int;   // 工作变量 页面数量 有多少台设备就有多少个页面
+   END_STRUCT;
+
+END_TYPE
+
+TYPE "typeCmds"
+VERSION : 0.1
+   STRUCT
+      PB_Start : Bool;
+      PB_Stop : Bool;
+      PB_Hold : Bool;
+      PB_UnHold : Bool;
+      PB_Reset : Bool;
+      PB_Clear : Bool;
+      PB_Abort : Bool;
+      PB_Production : Bool;
+      PB_Maintenance : Bool;
+      PB_Manual : Bool;
+   END_STRUCT;
+
+END_TYPE
+
+DATA_BLOCK "HMI_Data"
+{ S7_Optimized_Access := 'FALSE' }
+VERSION : 0.1
+   STRUCT 
+      ParameterAndOperation { S7_SetPoint := 'False'} : "typeParameterAndOperation";
+      ControlCmds : "typeCmds";
+      UnitModeCurrent { S7_SetPoint := 'True'} : DInt;
+      StateCurrent { S7_SetPoint := 'True'} : DInt;
+      Offset : Int;
+      MeasureTime : Time;
+      "Version" : Real;
+   END_STRUCT;
+
+
+BEGIN
+   ParameterAndOperation.Parameter.StationTimeOut := T#10S;
+   ParameterAndOperation.Parameter.StationTransitionTime := T#1S;
+   ParameterAndOperation.Parameter.PackageAlignmentTime := T#100MS;
+   ParameterAndOperation.Parameter.RollerSpeed.MaxVelocity := 110.0;
+   ParameterAndOperation.Parameter.RollerSpeed.FwdFastVelocity := 50.0;
+   ParameterAndOperation.Parameter.RollerSpeed.FwdSlowVelocity := 20.0;
+   ParameterAndOperation.Parameter.RollerSpeed.RevFastVelocity := 20.0;
+   ParameterAndOperation.Parameter.RollerSpeed.RevSlowVelocity := 10.0;
+   ParameterAndOperation.Parameter.BeltSpeed.MaxVelocity := 105.0;
+   ParameterAndOperation.Parameter.BeltSpeed.FwdFastVelocity := 40.0;
+   ParameterAndOperation.Parameter.BeltSpeed.FwdSlowVelocity := 20.0;
+   ParameterAndOperation.Parameter.BeltSpeed.RevFastVelocity := 20.0;
+   ParameterAndOperation.Parameter.BeltSpeed.RevSlowVelocity := 20.0;
+   ParameterAndOperation.Parameter.FilpSpeed.MaxVelocity := 44.0;
+   ParameterAndOperation.Parameter.FilpSpeed.FwdFastVelocity := 40.0;
+   ParameterAndOperation.Parameter.FilpSpeed.FwdSlowVelocity := 20.0;
+   ParameterAndOperation.Parameter.FilpSpeed.RevFastVelocity := 20.0;
+   ParameterAndOperation.Parameter.FilpSpeed.RevSlowVelocity := 10.0;
+   ParameterAndOperation.Parameter.BeltCylinderActionTime.Open := T#0MS;
+   ParameterAndOperation.Parameter.BeltCylinderActionTime.Close := T#0MS;
+   ParameterAndOperation.Parameter.BeltCylinderTimeout.Open := T#0MS;
+   ParameterAndOperation.Parameter.BeltCylinderTimeout.Close := T#0MS;
+   ParameterAndOperation.Parameter.B1_Sensor.OnFilter := T#50MS;
+   ParameterAndOperation.Parameter.B1_Sensor.OffFilter := T#50MS;
+   ParameterAndOperation.Parameter.B2_Sensor.OnFilter := T#50MS;
+   ParameterAndOperation.Parameter.B2_Sensor.OffFilter := T#50MS;
+   ParameterAndOperation.Parameter.B3_Sensor.OnFilter := T#50MS;
+   ParameterAndOperation.Parameter.B3_Sensor.OffFilter := T#50MS;
+   ParameterAndOperation.Parameter.B4_Sensor.OnFilter := T#50MS;
+   ParameterAndOperation.Parameter.B4_Sensor.OffFilter := T#50MS;
+   ParameterAndOperation.Parameter.B5_Sensor.OnFilter := T#50MS;
+   ParameterAndOperation.Parameter.B5_Sensor.OffFilter := T#50MS;
+   ParameterAndOperation.Parameter.B6_Sensor.OnFilter := T#50MS;
+   ParameterAndOperation.Parameter.B6_Sensor.OffFilter := T#50MS;
+   ParameterAndOperation.Parameter.B7_Sensor.OnFilter := T#50MS;
+   ParameterAndOperation.Parameter.B7_Sensor.OffFilter := T#50MS;
+   ParameterAndOperation.Parameter.B8_Sensor.OnFilter := T#50MS;
+   ParameterAndOperation.Parameter.B8_Sensor.OffFilter := T#50MS;
+   ParameterAndOperation.Parameter."Type" := 2;
+   ParameterAndOperation.OpCmds := 16#0000_0000;
+   ParameterAndOperation.SelectedIndex := 0;
+   ParameterAndOperation.OldSelectedIndex := 0;
+   ParameterAndOperation.IndexUpper := 6;
+   ControlCmds.PB_Start := FALSE;
+   ControlCmds.PB_Stop := FALSE;
+   ControlCmds.PB_Hold := FALSE;
+   ControlCmds.PB_UnHold := FALSE;
+   ControlCmds.PB_Reset := FALSE;
+   ControlCmds.PB_Clear := FALSE;
+   ControlCmds.PB_Abort := FALSE;
+   ControlCmds.PB_Production := FALSE;
+   ControlCmds.PB_Maintenance := FALSE;
+   ControlCmds.PB_Manual := FALSE;
+   UnitModeCurrent := 1;
+   StateCurrent := 6;
+   Offset := 190;
+   MeasureTime := T#2S;
+   "Version" := 1.0;
+
+END_DATA_BLOCK
+

@@ -1,0 +1,51 @@
+﻿<Window x:Class="UdtTool.Views.AboutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:UdtTool.Views"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        Title="关于"
+        Width="600"
+        Height="300"
+        FontFamily="宋体"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner"
+        mc:Ignorable="d">
+    <Grid>
+        <StackPanel VerticalAlignment="Center">
+            <TextBlock HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       FontSize="48"
+                       Text="UDT Tool" />
+            <TextBlock HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       FontSize="24"
+                       Text="版本 1.0.0" />
+            <TextBlock HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       FontSize="24"
+                       Text="© 2024 Hcyos" />
+            <TextBlock HorizontalAlignment="Center">
+                <Run Text="本工具是用于导出西门子S7-1200和S7-1500 PLC中的DB到InoTouchPad的工具。" />
+            </TextBlock>
+
+            <TextBlock Margin="0,16,0,0" HorizontalAlignment="Center">
+                <Run Foreground="Blue">注意：</Run>
+                <LineBreak />
+                <Run Foreground="Blue">1. 从西门子PLC中导出时DB时需要选择导出所有关联块。</Run>
+                <LineBreak />
+                <Run Foreground="Blue">2. 导出的DB需要勾选取消优化。</Run>
+                <LineBreak />
+                <Run Foreground="Blue">3. InoTouchPad里面的String类型的长度占用一个字节,而博途的String类型占用两个字节。</Run>
+            </TextBlock>
+
+        </StackPanel>
+        <Button Width="60"
+                Margin="10"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Command="{Binding OkCommand}"
+                Content="确定" />
+    </Grid>
+
+</Window>

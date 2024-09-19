@@ -1,0 +1,197 @@
+﻿TYPE "typeLPMLV30_ModeNames"
+VERSION : 0.1
+   STRUCT
+      Names_EN : Array[0..3] of String[18] := ['Invalid Mode', 'Product Mode', 'Maintenance Mode', 'Manual Mode'];
+      Names_CN : Array[0..3] of String[18] := ['没有定义', '自动模式', '维护模式', '手动模式'];
+   END_STRUCT;
+
+END_TYPE
+
+TYPE "typeLPMLV30_CommandNames"
+VERSION : 0.1
+   STRUCT
+      Name_EN : Array[0..31] of String[18] := ['UnDefined', 'Reset', 'Start', 'Stop', 'Hold', 'UnHold', 'Suspend', 'UnSuspend', 'Abort', 'Clear', 'Complete'];
+      Name_CN : Array[0..31] of String[18] := ['未定义', '复位命令', '启动命令', '停止命令', '保持命令', '解除保持命令', '暂停命令', '解除暂停命令', '终止命令', '重置命令', '完成命令'];
+   END_STRUCT;
+
+END_TYPE
+
+TYPE "typeLPMLV30_StatesNames"
+VERSION : 0.1
+   STRUCT
+      Name_EN : Array[0..31] of String[18] := ['UnDefined', 'Clearing', 'Stopped', 'Starting', 'Idle', 'Suspended', 'Execute', 'Stopping', 'Aborting', 'Aborted', 'Holding', 'Held', 'Unholding', 'Suspending', 'UnSuspending', 'Resetting', 'Completing', 'Complete'];
+      Name_CN : Array[0..31] of String[18] := ['未定义', '正在清除', '已经停止', '正在启动', '空闲', '已经暂停', '执行', '正在停止', '正在终止', '已经终止', '正在保持', '已经保持', '正在解除保持', '正在暂停', '正在解除暂停', '正在复位', '正在完成', '完成'];
+   END_STRUCT;
+
+END_TYPE
+
+TYPE "typeLPMLV30_Modes"
+VERSION : 0.1
+   STRUCT
+      InvalidMode : Bool;   // 无效模式
+      ProductionMode : Bool;   // 生产模式
+      MaintenanceMode : Bool;   // 维护模式
+      ManualMode : Bool;   // 手动模式
+      Bit4 : Bool;
+      Bit5 : Bool;
+      Bit6 : Bool;
+      Bit7 : Bool;
+      Bit8 : Bool;
+      Bit9 : Bool;
+      Bit10 : Bool;
+      Bit11 : Bool;
+      Bit12 : Bool;
+      Bit13 : Bool;
+      Bit14 : Bool;
+      Bit15 : Bool;
+      Bit16 : Bool;
+      Bit17 : Bool;
+      Bit18 : Bool;
+      Bit19 : Bool;
+      Bit20 : Bool;
+      Bit21 : Bool;
+      Bit22 : Bool;
+      Bit23 : Bool;
+      Bit24 : Bool;
+      Bit25 : Bool;
+      Bit26 : Bool;
+      Bit27 : Bool;
+      Bit28 : Bool;
+      Bit29 : Bool;
+      Bit30 : Bool;
+      Bit31 : Bool;
+   END_STRUCT;
+
+END_TYPE
+
+TYPE "typeLPMLV30_Commands"
+VERSION : 0.1
+   STRUCT
+      UnDefined : Bool;   // 未定义
+      ResetCmd : Bool;   // 复位
+      StartCmd : Bool;   // 启动
+      StopCmd : Bool;   // 停止
+      HoldCmd : Bool;   // 保持
+      AbortCmd : Bool;   // 解除保持
+      UnholdCmd : Bool;   // 暂停
+      SuspendCmd : Bool;   // 解除暂停
+      UnsuspendCmd : Bool;   // 中止
+      ClearCmd : Bool;   // 清除
+      CompleteCmd : Bool;   // 完成
+      Spare_1_3 : Bool;
+      Spare_1_4 : Bool;
+      Spare_1_5 : Bool;
+      Spare_1_6 : Bool;
+      Spare_1_7 : Bool;
+   END_STRUCT;
+
+END_TYPE
+
+TYPE "typeLPMLV30_States"
+VERSION : 0.1
+   STRUCT
+      Clearing : Bool;   // TRUE:正在清除
+      Stopped : Bool;   // TRUE:已经停止
+      Starting : Bool;   // TRUE:正在启动
+      Idle : Bool;   // TRUE:空闲
+      Suspended : Bool;   // TRUE:已经暂停
+      Execute : Bool;   // TRUE:执行状态
+      Stopping : Bool;   // TRUE:正在停止
+      Aborting : Bool;   // TRUE:正在终止
+      Aborted : Bool;   // TRUE:已经终止
+      Holding : Bool;   // TRUE:正在保持
+      Held : Bool;   // TRUE:已经保持
+      Unholding : Bool;   // TRUE:正在解除保持
+      Suspending : Bool;   // TRUE:正在暂停
+      UnSuspending : Bool;   // TRUE:正在解除暂停
+      Resetting : Bool;   // TRUE:正在重置
+      Completing : Bool;   // TRUE:正在完成
+      Complete : Bool;   // TRUE:已经完成
+      Spare1 : Bool := true;
+      Spare2 : Bool := true;
+      Spare3 : Bool := true;
+      Spare4 : Bool := true;
+      Spare5 : Bool := true;
+      Spare6 : Bool := true;
+      Spare7 : Bool := true;
+      Spare8 : Bool := true;
+      Spare9 : Bool := true;
+      Spare10 : Bool := true;
+      Spare11 : Bool := true;
+      Spare12 : Bool := true;
+      Spare13 : Bool := true;
+      Spare14 : Bool := true;
+      Spare15 : Bool := true;
+   END_STRUCT;
+
+END_TYPE
+
+TYPE "typeLPMLV30_ModeAndStatesNameConfiguration"
+VERSION : 0.1
+   STRUCT
+      ModesNames : "typeLPMLV30_ModeNames" := (['Invalid Mode', 'Product Mode', 'Maintenance Mode', 'Manual Mode'], ['没有定义', '自动模式', '维护模式', '手动模式']);
+      CommandNames : "typeLPMLV30_CommandNames" := (['UnDefined', 'Reset', 'Start', 'Stop', 'Hold', 'UnHold', 'Suspend', 'UnSuspend', 'Abort', 'Clear', 'Complete'], ['未定义', '复位命令', '启动命令', '停止命令', '保持命令', '解除保持命令', '暂停命令', '解除暂停命令', '终止命令', '重置命令', '完成命令']);
+      StatesNames : "typeLPMLV30_StatesNames" := (['UnDefined', 'Clearing', 'Stopped', 'Starting', 'Idle', 'Suspended', 'Execute', 'Stopping', 'Aborting', 'Aborted', 'Holding', 'Held', 'Unholding', 'Suspending', 'UnSuspending', 'Resetting', 'Completing', 'Complete'], ['未定义', '正在清除', '已经停止', '正在启动', '空闲', '已经暂停', '执行', '正在停止', '正在终止', '已经终止', '正在保持', '已经保持', '正在解除保持', '正在暂停', '正在解除暂停', '正在复位', '正在完成', '完成']);
+   END_STRUCT;
+
+END_TYPE
+
+TYPE "typeLPMLV30_ModeAndStateCtrl"
+VERSION : 0.1
+   STRUCT
+      EnableBooleanInterfere { S7_SetPoint := 'True'} : Bool;
+      UnitModeChangeRequest { S7_SetPoint := 'True'} : Bool;
+      UnitMode { S7_SetPoint := 'True'} : DInt;
+      ModeRequestBoolean { S7_SetPoint := 'False'} : "typeLPMLV30_Modes";
+      CmdChangeRequest : Bool;
+      CntrlCmd { S7_SetPoint := 'True'} : DInt;
+      CmdRequestBoolean : "typeLPMLV30_Commands";
+   END_STRUCT;
+
+END_TYPE
+
+TYPE "typeLPMLV30_ActModeAndStates"
+VERSION : 0.1
+   STRUCT
+      UnitModeCurrent : DInt;
+      UnitModeRequested : DInt;
+      UnitModeChangeInProcess : Bool;
+      StateCurrent : DInt;
+      StateRequested : DInt;
+      StateChangeInProcess : Bool;
+      StateDisabled : DInt;
+      UnitModeCurrentName : String[18];
+      StateCurrentName : String[18];
+      UnitModeCurrentBool { S7_SetPoint := 'False'} : "typeLPMLV30_Modes";
+      StateCurrentBool { S7_SetPoint := 'False'} : "typeLPMLV30_States";
+   END_STRUCT;
+
+END_TYPE
+
+TYPE "typeLPMLV30_Configuration"
+VERSION : 0.1
+   STRUCT
+      DisabledUnitModes { S7_SetPoint := 'False'} : "typeLPMLV30_Modes";
+      DisabledStatesInUnitModes { S7_SetPoint := 'False'} : Array[0..3] of "typeLPMLV30_States";
+      ModeAndStatesNames : "typeLPMLV30_ModeAndStatesNameConfiguration" := ((['Invalid Mode', 'Product Mode', 'Maintenance Mode', 'Manual Mode'], ['没有定义', '自动模式', '维护模式', '手动模式']), (['UnDefined', 'Reset', 'Start', 'Stop', 'Hold', 'UnHold', 'Suspend', 'UnSuspend', 'Abort', 'Clear', 'Complete'], ['未定义', '复位命令', '启动命令', '停止命令', '保持命令', '解除保持命令', '暂停命令', '解除暂停命令', '终止命令', '重置命令', '完成命令']), (['UnDefined', 'Clearing', 'Stopped', 'Starting', 'Idle', 'Suspended', 'Execute', 'Stopping', 'Aborting', 'Aborted', 'Holding', 'Held', 'Unholding', 'Suspending', 'UnSuspending', 'Resetting', 'Completing', 'Complete'], ['未定义', '正在清除', '已经停止', '正在启动', '空闲', '已经暂停', '执行', '正在停止', '正在终止', '已经终止', '正在保持', '已经保持', '正在解除保持', '正在暂停', '正在解除暂停', '正在复位', '正在完成', '完成']));
+      PackML_Version { S7_SetPoint := 'True'} : Int;
+   END_STRUCT;
+
+END_TYPE
+
+DATA_BLOCK "LPMLV30_Data"
+{ S7_Optimized_Access := 'FALSE' }
+VERSION : 0.1
+NON_RETAIN
+   STRUCT 
+      Control : "typeLPMLV30_ModeAndStateCtrl";
+      ActModeAndStates : "typeLPMLV30_ActModeAndStates";
+      Configuration : "typeLPMLV30_Configuration";
+      StateComplete : DWord;
+   END_STRUCT;
+
+
+BEGIN
+
+END_DATA_BLOCK
+

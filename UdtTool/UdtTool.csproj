@@ -2,29 +2,54 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
-    <ApplicationIcon>Assets\Images\screwdriver.ico</ApplicationIcon>
+    <ApplicationIcon>Assets\Images\SQLAzure.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Assets\Images\icons8-monitor-40.png" />
-    <None Remove="Assets\Images\icons8-monitor-80.png" />
+    <None Remove="Assets\Images\about.png" />
+    <None Remove="Assets\Images\Cut.png" />
+    <None Remove="Assets\Images\DB.png" />
+    <None Remove="Assets\Images\folder.png" />
+    <None Remove="Assets\Images\Open.png" />
+    <None Remove="Assets\Images\Save.png" />
+    <None Remove="Assets\Images\SaveAs.png" />
+    <None Remove="Assets\Images\SQLAzure.ico" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
-    <PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
+    <Content Include="Assets\Images\SQLAzure.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" />
+    <PackageReference Include="MvvmDialogs" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\UdtTool.Core\UdtTool.Core.csproj" />
+    <ProjectReference Include="..\UdtTool.Service\UdtTool.Service.csproj" />
+    <ProjectReference Include="..\UdtTool.Support\UdtTool.Support.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Assets\Images\icons8-monitor-40.png" />
-    <Resource Include="Assets\Images\icons8-monitor-80.png" />
+    <Resource Include="Assets\Images\about.png" />
+    <Resource Include="Assets\Images\Cut.png" />
+    <Resource Include="Assets\Images\DB.png" />
+    <Resource Include="Assets\Images\folder.png" />
+    <Resource Include="Assets\Images\Open.png" />
+    <Resource Include="Assets\Images\Save.png" />
+    <Resource Include="Assets\Images\SaveAs.png" />
+    <Resource Include="Assets\Images\SQLAzure.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Converters\" />
+    <Folder Include="Themes\" />
   </ItemGroup>
 
 </Project>
