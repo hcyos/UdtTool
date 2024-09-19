@@ -13,6 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "解决方案项", "解决�
 	ProjectSection(SolutionItems) = preProject
 		.csharpierrc.json = .csharpierrc.json
 		Directory.Packages.props = Directory.Packages.props
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UdtTool.Service", "UdtTool.Service\UdtTool.Service.csproj", "{96128ED1-AADF-48ED-AB04-DBF85FE8521E}"
