@@ -1,0 +1,433 @@
+﻿TYPE "Cm_typeMD800Configuration"
+VERSION : 0.1
+   STRUCT
+      SpeedMax { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Real := 50.0;
+      SpeedForwardFast { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Real := 50.0;
+      SpeedForwardSlow { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Real := 20.0;
+      SpeedReverseFast { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Real := 50.0;
+      SpeedReverseSlow { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Real := 20.0;
+   END_STRUCT;
+
+END_TYPE
+
+TYPE "Cm_typeSensor"
+VERSION : 0.1
+   STRUCT
+      ON : Time := T#50ms;   // 接通动作时间
+      OFF : Time := T#50ms;   // 断开动作时间
+   END_STRUCT;
+
+END_TYPE
+
+TYPE "Cm_typeMD800TelIn"
+VERSION : 0.1
+   STRUCT
+      "U0-68" : Struct   // Bit0：运行状态 Bit1：正反转状态 Bit2：是否发生故障 Bit3：输出频率是否到达设定频率Bit4：通信正常标志 Bit8~Bit15：故障主码
+         ErrorCode : Byte;   // 故障主码
+         Bit0 : Bool;   // TRUE:运行状态
+         Bit1 : Bool;   // TRUE:正反转状态
+         Bit2 : Bool;   // TRUE:是否发生故障
+         Bit3 : Bool;   // TRUE:输出频率是否到达设定频率
+         Bit4 : Bool;   // TRUE:通信正常标志
+         Bit5 : Bool;   // 保留
+         Bit6 : Bool;   // 保留
+         Bit7 : Bool;   // 保留
+      END_STRUCT;
+      "U0-00" : UInt;   // 变频器的运行频率(Hz)
+   END_STRUCT;
+
+END_TYPE
+
+TYPE "Cm_typeMD800TelOut"
+VERSION : 0.1
+   STRUCT
+      "U3-17" : UInt;   // 控制命令:0:按停机方式F6-10停机 1:正传运行 2:反转运行 7:故障复位
+      "U3-16" : UInt;   // 给定频率:0-65535
+   END_STRUCT;
+
+END_TYPE
+
+TYPE "typeOperatorCommands"
+VERSION : 0.1
+   STRUCT
+      PB_Start : Bool;
+      PB_Stop : Bool;
+      PB_Hold : Bool;
+      PB_UnHold : Bool;
+      PB_Reset : Bool;
+      PB_Clear : Bool;
+      PB_Abort : Bool;
+      PB_Production : Bool;
+      PB_Maintenance : Bool;
+      PB_Manual : Bool;
+   END_STRUCT;
+
+END_TYPE
+
+TYPE "Em_typeConfiguration"
+VERSION : 0.1
+   STRUCT
+      TimeOut : Time := T#20s;   // 输送产品的超时时间
+      TransitionTime : Time := T#1s;   // 移交产品的过渡时间,
+      AlignmentTime : Time := T#200ms;
+      Roller { S7_SetPoint := 'False'} : "Cm_typeMD800Configuration";   // 滚筒速度
+      Belt { S7_SetPoint := 'False'} : "Cm_typeMD800Configuration";   // 皮带速度
+      BeltCylinderTimeout : Time := T#5s;   // 皮带气缸超时时间
+      B5 { S7_SetPoint := 'False'} : "Cm_typeSensor";
+      B0 : "Cm_typeSensor";
+      B1 : "Cm_typeSensor";   // 直辊减速传感器
+      B2 : "Cm_typeSensor";   // 直辊缓传感器
+      B3 : "Cm_typeSensor";   // 同步带减速传感器
+      B4 : "Cm_typeSensor";   // 同步带缓存传感器
+      B600 : "Cm_typeSensor";
+      "Type" { S7_SetPoint := 'True'} : Int;
+      Channel { S7_SetPoint := 'True'} : Int;
+      Exit1 { S7_SetPoint := 'True'} : Int := 1;
+      Exit2 { S7_SetPoint := 'True'} : Int := 2;
+      Exit3 { S7_SetPoint := 'True'} : Int := 3;
+   END_STRUCT;
+
+END_TYPE
+
+TYPE "Em_typeCommands"
+VERSION : 0.1
+   STRUCT
+      RollerForward : Bool;
+      BeltForward : Bool;
+      FilpForward : Bool;
+      FilpReverse : Bool;
+      BeltCylinderOpen : Bool;
+      Spare6 : Bool;
+      Spare7 : Bool;
+      Spare8 : Bool;
+      Spare9 : Bool;
+      Spare10 : Bool;
+      Spare11 : Bool;
+      Spare12 : Bool;
+      Spare13 : Bool;
+      Spare14 : Bool;
+      Spare15 : Bool;
+      Spare16 : Bool;
+   END_STRUCT;
+
+END_TYPE
+
+TYPE "typeAlarms"
+VERSION : 0.1
+   STRUCT
+      AbnormalReset : Bool;   // =1 异常复位
+      BeltCylinderForwardTimeout : Bool;
+      BeltCylinderBackwardTimeout : Bool;
+      RollerDriverFault : Bool;
+      BeltDriverFault : Bool;
+      SortingDataError : Bool;
+      Spare7 : Bool;
+      Spare8 : Bool;
+      Spare9 : Bool;
+      Spare10 : Bool;
+      Spare11 : Bool;
+      Spare12 : Bool;
+      Spare13 : Bool;
+      Spare14 : Bool;
+      Spare15 : Bool;
+      Spare16 : Bool;
+   END_STRUCT;
+
+END_TYPE
+
+TYPE "Em_typeHardware"
+VERSION : 0.1
+   STRUCT
+      S1 { ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      S4 { ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      S5 { ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      B0 { ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      B1 { ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      B2 { ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      B3 { ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      B4 { ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      B600 { ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      SixDrillCamRTM { ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      SixDrillCamROK { ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      RollerDriver { ExternalVisible := 'False'; ExternalWritable := 'False'} : Struct
+         TelIn { ExternalVisible := 'False'; ExternalWritable := 'False'; S7_SetPoint := 'False'} : "Cm_typeMD800TelIn";
+         TelOut { ExternalVisible := 'False'; ExternalWritable := 'False'; S7_SetPoint := 'False'} : "Cm_typeMD800TelOut";
+      END_STRUCT;
+      BeltDriver { ExternalVisible := 'False'; ExternalWritable := 'False'} : Struct
+         TelIn { ExternalVisible := 'False'; ExternalWritable := 'False'; S7_SetPoint := 'False'} : "Cm_typeMD800TelIn";
+         TelOut { ExternalVisible := 'False'; ExternalWritable := 'False'; S7_SetPoint := 'False'} : "Cm_typeMD800TelOut";
+      END_STRUCT;
+      BeltCylinder { ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      Exit1Lamp { ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      Exit2Lamp { ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      Exit3Lamp { ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+   END_STRUCT;
+
+END_TYPE
+
+DATA_BLOCK "HMI_Data"
+{ S7_Optimized_Access := 'FALSE' }
+VERSION : 0.1
+   STRUCT 
+      "Version" : Real;
+      UnitModeCurrent : DInt;
+      StateCurrent : DInt;
+      UnCommands { S7_SetPoint := 'False'} : "typeOperatorCommands";
+      Page : Int;
+      LastPage : Int;
+      TotalPage : Int;
+      Configuration { S7_SetPoint := 'False'} : "Em_typeConfiguration";
+      Commands { S7_SetPoint := 'False'} : "Em_typeCommands";
+      GT1_Alarm { S7_SetPoint := 'False'} : "typeAlarms";
+      GT2_Alarm { S7_SetPoint := 'False'} : "typeAlarms";
+      GT3_Alarm { S7_SetPoint := 'False'} : "typeAlarms";
+      GT4_Alarm { S7_SetPoint := 'False'} : "typeAlarms";
+      GT5_Alarm { S7_SetPoint := 'False'} : "typeAlarms";
+      GT6_Alarm { S7_SetPoint := 'False'} : "typeAlarms";
+      GT7_Alarm { S7_SetPoint := 'False'} : "typeAlarms";
+      GT8_Alarm { S7_SetPoint := 'False'} : "typeAlarms";
+      GT9_Alarm { S7_SetPoint := 'False'} : "typeAlarms";
+      GT10_Alarm { S7_SetPoint := 'False'} : "typeAlarms";
+      GT11_Alarm { S7_SetPoint := 'False'} : "typeAlarms";
+      GT12_Alarm { S7_SetPoint := 'False'} : "typeAlarms";
+      GT13_Alarm { S7_SetPoint := 'False'} : "typeAlarms";
+      GT14_Alarm { S7_SetPoint := 'False'} : "typeAlarms";
+      GT15_Alarm { S7_SetPoint := 'False'} : "typeAlarms";
+      GT4_SortOption : Struct
+         NotSorting : Bool;
+         ExitNumberOfNotSort : Int;
+      END_STRUCT;
+      GT5_SortOption : Struct
+         NotSort : Bool;
+         ExitNumberOfNotSort : Int;
+      END_STRUCT;
+      Hardware { S7_SetPoint := 'False'} : "Em_typeHardware";
+   END_STRUCT;
+
+
+BEGIN
+   "Version" := 1.0;
+   UnitModeCurrent := 3;
+   StateCurrent := 2;
+   UnCommands.PB_Start := FALSE;
+   UnCommands.PB_Stop := FALSE;
+   UnCommands.PB_Hold := FALSE;
+   UnCommands.PB_UnHold := FALSE;
+   UnCommands.PB_Reset := FALSE;
+   UnCommands.PB_Clear := FALSE;
+   UnCommands.PB_Abort := FALSE;
+   UnCommands.PB_Production := FALSE;
+   UnCommands.PB_Maintenance := FALSE;
+   UnCommands.PB_Manual := FALSE;
+   Page := 3;
+   LastPage := 3;
+   TotalPage := 14;
+   Configuration.TimeOut := T#10S;
+   Configuration.TransitionTime := T#1S;
+   Configuration.Roller.SpeedMax := 128.0;
+   Configuration.Roller.SpeedForwardFast := 50.0;
+   Configuration.Roller.SpeedForwardSlow := 20.0;
+   Configuration.Roller.SpeedReverseFast := 50.0;
+   Configuration.Roller.SpeedReverseSlow := 20.0;
+   Configuration.Belt.SpeedMax := 105.3;
+   Configuration.Belt.SpeedForwardFast := 60.0;
+   Configuration.Belt.SpeedForwardSlow := 20.0;
+   Configuration.Belt.SpeedReverseFast := 50.0;
+   Configuration.Belt.SpeedReverseSlow := 20.0;
+   Configuration.BeltCylinderTimeout := T#5S;
+   Configuration.B1.ON := T#50MS;
+   Configuration.B1.OFF := T#50MS;
+   Configuration.B2.ON := T#50MS;
+   Configuration.B2.OFF := T#50MS;
+   Configuration.B3.ON := T#50MS;
+   Configuration.B3.OFF := T#50MS;
+   Configuration.B4.ON := T#50MS;
+   Configuration.B4.OFF := T#50MS;
+   Configuration.B600.ON := T#50MS;
+   Configuration.B600.OFF := T#50MS;
+   Configuration."Type" := 0;
+   Configuration.Channel := 0;
+   Configuration.Exit1 := 1;
+   Configuration.Exit2 := 2;
+   Configuration.Exit3 := 3;
+   Commands.RollerForward := FALSE;
+   Commands.BeltForward := FALSE;
+   Commands.FilpForward := FALSE;
+   Commands.FilpReverse := FALSE;
+   Commands.BeltCylinderOpen := FALSE;
+   Commands.Spare6 := FALSE;
+   Commands.Spare7 := FALSE;
+   Commands.Spare8 := FALSE;
+   Commands.Spare9 := FALSE;
+   Commands.Spare10 := FALSE;
+   Commands.Spare11 := FALSE;
+   Commands.Spare12 := FALSE;
+   Commands.Spare13 := FALSE;
+   Commands.Spare14 := FALSE;
+   Commands.Spare15 := FALSE;
+   Commands.Spare16 := FALSE;
+   GT1_Alarm.AbnormalReset := FALSE;
+   GT1_Alarm.BeltCylinderForwardTimeout := FALSE;
+   GT1_Alarm.BeltCylinderBackwardTimeout := FALSE;
+   GT1_Alarm.RollerDriverFault := FALSE;
+   GT1_Alarm.BeltDriverFault := FALSE;
+   GT1_Alarm.SortingDataError := FALSE;
+   GT1_Alarm.Spare7 := FALSE;
+   GT1_Alarm.Spare8 := FALSE;
+   GT1_Alarm.Spare9 := FALSE;
+   GT1_Alarm.Spare10 := FALSE;
+   GT1_Alarm.Spare11 := FALSE;
+   GT1_Alarm.Spare12 := FALSE;
+   GT1_Alarm.Spare13 := FALSE;
+   GT1_Alarm.Spare14 := FALSE;
+   GT1_Alarm.Spare15 := FALSE;
+   GT1_Alarm.Spare16 := FALSE;
+   GT2_Alarm.AbnormalReset := FALSE;
+   GT2_Alarm.BeltCylinderForwardTimeout := FALSE;
+   GT2_Alarm.BeltCylinderBackwardTimeout := FALSE;
+   GT2_Alarm.RollerDriverFault := FALSE;
+   GT2_Alarm.BeltDriverFault := FALSE;
+   GT2_Alarm.SortingDataError := FALSE;
+   GT2_Alarm.Spare7 := FALSE;
+   GT2_Alarm.Spare8 := FALSE;
+   GT2_Alarm.Spare9 := FALSE;
+   GT2_Alarm.Spare10 := FALSE;
+   GT2_Alarm.Spare11 := FALSE;
+   GT2_Alarm.Spare12 := FALSE;
+   GT2_Alarm.Spare13 := FALSE;
+   GT2_Alarm.Spare14 := FALSE;
+   GT2_Alarm.Spare15 := FALSE;
+   GT2_Alarm.Spare16 := FALSE;
+   GT3_Alarm.AbnormalReset := FALSE;
+   GT3_Alarm.BeltCylinderForwardTimeout := FALSE;
+   GT3_Alarm.BeltCylinderBackwardTimeout := FALSE;
+   GT3_Alarm.RollerDriverFault := FALSE;
+   GT3_Alarm.BeltDriverFault := FALSE;
+   GT3_Alarm.SortingDataError := FALSE;
+   GT3_Alarm.Spare7 := FALSE;
+   GT3_Alarm.Spare8 := FALSE;
+   GT3_Alarm.Spare9 := FALSE;
+   GT3_Alarm.Spare10 := FALSE;
+   GT3_Alarm.Spare11 := FALSE;
+   GT3_Alarm.Spare12 := FALSE;
+   GT3_Alarm.Spare13 := FALSE;
+   GT3_Alarm.Spare14 := FALSE;
+   GT3_Alarm.Spare15 := FALSE;
+   GT3_Alarm.Spare16 := FALSE;
+   GT4_Alarm.AbnormalReset := FALSE;
+   GT4_Alarm.BeltCylinderForwardTimeout := FALSE;
+   GT4_Alarm.BeltCylinderBackwardTimeout := TRUE;
+   GT4_Alarm.RollerDriverFault := FALSE;
+   GT4_Alarm.BeltDriverFault := FALSE;
+   GT4_Alarm.SortingDataError := FALSE;
+   GT4_Alarm.Spare7 := FALSE;
+   GT4_Alarm.Spare8 := FALSE;
+   GT4_Alarm.Spare9 := FALSE;
+   GT4_Alarm.Spare10 := FALSE;
+   GT4_Alarm.Spare11 := FALSE;
+   GT4_Alarm.Spare12 := FALSE;
+   GT4_Alarm.Spare13 := FALSE;
+   GT4_Alarm.Spare14 := FALSE;
+   GT4_Alarm.Spare15 := FALSE;
+   GT4_Alarm.Spare16 := FALSE;
+   GT5_Alarm.AbnormalReset := FALSE;
+   GT5_Alarm.BeltCylinderForwardTimeout := TRUE;
+   GT5_Alarm.BeltCylinderBackwardTimeout := FALSE;
+   GT5_Alarm.RollerDriverFault := FALSE;
+   GT5_Alarm.BeltDriverFault := FALSE;
+   GT5_Alarm.SortingDataError := FALSE;
+   GT5_Alarm.Spare7 := FALSE;
+   GT5_Alarm.Spare8 := FALSE;
+   GT5_Alarm.Spare9 := FALSE;
+   GT5_Alarm.Spare10 := FALSE;
+   GT5_Alarm.Spare11 := FALSE;
+   GT5_Alarm.Spare12 := FALSE;
+   GT5_Alarm.Spare13 := FALSE;
+   GT5_Alarm.Spare14 := FALSE;
+   GT5_Alarm.Spare15 := FALSE;
+   GT5_Alarm.Spare16 := FALSE;
+   GT6_Alarm.AbnormalReset := FALSE;
+   GT6_Alarm.BeltCylinderForwardTimeout := FALSE;
+   GT6_Alarm.BeltCylinderBackwardTimeout := FALSE;
+   GT6_Alarm.RollerDriverFault := FALSE;
+   GT6_Alarm.BeltDriverFault := FALSE;
+   GT6_Alarm.SortingDataError := FALSE;
+   GT6_Alarm.Spare7 := FALSE;
+   GT6_Alarm.Spare8 := FALSE;
+   GT6_Alarm.Spare9 := FALSE;
+   GT6_Alarm.Spare10 := FALSE;
+   GT6_Alarm.Spare11 := FALSE;
+   GT6_Alarm.Spare12 := FALSE;
+   GT6_Alarm.Spare13 := FALSE;
+   GT6_Alarm.Spare14 := FALSE;
+   GT6_Alarm.Spare15 := FALSE;
+   GT6_Alarm.Spare16 := FALSE;
+   GT7_Alarm.AbnormalReset := FALSE;
+   GT7_Alarm.BeltCylinderForwardTimeout := FALSE;
+   GT7_Alarm.BeltCylinderBackwardTimeout := FALSE;
+   GT7_Alarm.RollerDriverFault := FALSE;
+   GT7_Alarm.BeltDriverFault := FALSE;
+   GT7_Alarm.SortingDataError := FALSE;
+   GT7_Alarm.Spare7 := FALSE;
+   GT7_Alarm.Spare8 := FALSE;
+   GT7_Alarm.Spare9 := FALSE;
+   GT7_Alarm.Spare10 := FALSE;
+   GT7_Alarm.Spare11 := FALSE;
+   GT7_Alarm.Spare12 := FALSE;
+   GT7_Alarm.Spare13 := FALSE;
+   GT7_Alarm.Spare14 := FALSE;
+   GT7_Alarm.Spare15 := FALSE;
+   GT7_Alarm.Spare16 := FALSE;
+   GT8_Alarm.AbnormalReset := FALSE;
+   GT8_Alarm.BeltCylinderForwardTimeout := FALSE;
+   GT8_Alarm.BeltCylinderBackwardTimeout := FALSE;
+   GT8_Alarm.RollerDriverFault := FALSE;
+   GT8_Alarm.BeltDriverFault := FALSE;
+   GT8_Alarm.SortingDataError := FALSE;
+   GT8_Alarm.Spare7 := FALSE;
+   GT8_Alarm.Spare8 := FALSE;
+   GT8_Alarm.Spare9 := FALSE;
+   GT8_Alarm.Spare10 := FALSE;
+   GT8_Alarm.Spare11 := FALSE;
+   GT8_Alarm.Spare12 := FALSE;
+   GT8_Alarm.Spare13 := FALSE;
+   GT8_Alarm.Spare14 := FALSE;
+   GT8_Alarm.Spare15 := FALSE;
+   GT8_Alarm.Spare16 := FALSE;
+   GT9_Alarm.AbnormalReset := FALSE;
+   GT9_Alarm.BeltCylinderForwardTimeout := FALSE;
+   GT9_Alarm.BeltCylinderBackwardTimeout := FALSE;
+   GT9_Alarm.RollerDriverFault := FALSE;
+   GT9_Alarm.BeltDriverFault := FALSE;
+   GT9_Alarm.SortingDataError := FALSE;
+   GT9_Alarm.Spare7 := FALSE;
+   GT9_Alarm.Spare8 := FALSE;
+   GT9_Alarm.Spare9 := FALSE;
+   GT9_Alarm.Spare10 := FALSE;
+   GT9_Alarm.Spare11 := FALSE;
+   GT9_Alarm.Spare12 := FALSE;
+   GT9_Alarm.Spare13 := FALSE;
+   GT9_Alarm.Spare14 := FALSE;
+   GT9_Alarm.Spare15 := FALSE;
+   GT9_Alarm.Spare16 := FALSE;
+   GT10_Alarm.AbnormalReset := FALSE;
+   GT10_Alarm.BeltCylinderForwardTimeout := FALSE;
+   GT10_Alarm.BeltCylinderBackwardTimeout := FALSE;
+   GT10_Alarm.RollerDriverFault := FALSE;
+   GT10_Alarm.BeltDriverFault := FALSE;
+   GT10_Alarm.SortingDataError := FALSE;
+   GT10_Alarm.Spare7 := FALSE;
+   GT10_Alarm.Spare8 := FALSE;
+   GT10_Alarm.Spare9 := FALSE;
+   GT10_Alarm.Spare10 := FALSE;
+   GT10_Alarm.Spare11 := FALSE;
+   GT10_Alarm.Spare12 := FALSE;
+   GT10_Alarm.Spare13 := FALSE;
+   GT10_Alarm.Spare14 := FALSE;
+   GT10_Alarm.Spare15 := FALSE;
+   GT10_Alarm.Spare16 := FALSE;
+   GT4_SortOption.ExitNumberOfNotSort := 4;
+   GT5_SortOption.ExitNumberOfNotSort := 5;
+
+END_DATA_BLOCK
+

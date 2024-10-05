@@ -116,14 +116,67 @@ public sealed partial class ParserService : IParserService
         if (string.IsNullOrEmpty(content))
             throw new ArgumentNullException(nameof(content));
 
+        content = PreprocessContent(content);
+
+        //  解析用户自定义类型
         ParseUserDefinedTypes(content);
+        //  解析数据块内容
         var dataBlock = ParseDataBlockContent(content);
+        //  填充用户自定义类型
         FillUserDefinedTypes(dataBlock.Tags);
+        //  设置符号层级
         SetTagLevels(dataBlock.Tags);
+        //  计算符号偏移
         _tagAddressGenerator = new TagAddressGenerator();
         CalculateTagOffsets(dataBlock.Tags);
+        //  返回解析结果
         return dataBlock;
     }
+    #endregion
+
+    #region 字符内容预处理
+    private static string PreprocessContent(string content)
+    {
+        // 使用正则表达式去除大括号内的内容
+        content = Regex.Replace(content, @"{[^{}]*}", "", RegexOptions.Compiled);
+        // 使用正则表达式去除注释
+        content = Regex.Replace(
+            content,
+            @"//.*?$",
+            "",
+            RegexOptions.Multiline | RegexOptions.Singleline | RegexOptions.Compiled
+        );
+        // 使用正则表达式去除双引号
+        content = Regex.Replace(
+            content,
+            @"""",
+            "",
+            RegexOptions.Multiline | RegexOptions.Singleline | RegexOptions.Compiled
+        );
+        // 使用正则表达式去除赋值语句
+        content = Regex.Replace(
+            content,
+            @":=.*?;",
+            ";",
+            RegexOptions.Multiline | RegexOptions.Singleline | RegexOptions.Compiled
+        );
+        // 删除空白行
+        content = Regex.Replace(
+            content,
+            @"^\s*$\n",
+            "",
+            RegexOptions.Multiline | RegexOptions.Singleline | RegexOptions.Compiled
+        );
+        // 使用正则表达式去除行尾空格
+        content = Regex.Replace(
+            content,
+            @"[ \t]+$",
+            "",
+            RegexOptions.Multiline | RegexOptions.Singleline | RegexOptions.Compiled
+        );
+        return content;
+    }
+
     #endregion
 
     #region ParseDataBlockContent Method
@@ -174,13 +227,17 @@ public sealed partial class ParserService : IParserService
     {
         foreach (Match propertyMatch in TagPropertiesRegex().Matches(fieldsContent))
         {
+            //  结构体成员
             if (propertyMatch.Groups["structname"].Success)
             {
                 var tag = new TagModel { Name = propertyMatch.Groups["structname"].Value, DataType = "Struct" };
-                ParseTag(propertyMatch.Groups["structfields"].Value, tag.Tags);
+
+                string structFields = propertyMatch.Groups["structfields"].Value;
+                ParseTag(structFields, tag.Tags);
                 tags.Add(tag);
             }
 
+            //  变量成员
             if (propertyMatch.Groups["varname"].Success)
             {
                 var tag = new TagModel
@@ -226,8 +283,9 @@ public sealed partial class ParserService : IParserService
     private void ParseUserDefinedTypes(string content)
     {
         _userDefinedTypes = [];
+        //  使用正则表达式匹配用户自定义类型
         var udtMatches = UserDefinedTypePropertiesRegex().Matches(content);
-
+        //  遍历匹配结果
         foreach (Match typeMatch in udtMatches)
         {
             var typeName = typeMatch.Groups["typeName"].Value;
@@ -257,15 +315,14 @@ public sealed partial class ParserService : IParserService
             )
             {
                 tag.Tags = new ObservableCollection<TagModel>(value1.Tags.Select(x => (TagModel)x.Clone()));
-                if (tag.Tags.Count > 0)
-                    FillUserDefinedTypes(tag.Tags);
             }
             else if (_tiaPortalComplexDataTypes.TryGetValue(tag.DataType!, out UserDefinedTypeModel? value2))
             {
                 tag.Tags = new ObservableCollection<TagModel>(value2.Tags.Select(x => (TagModel)x.Clone()));
-                if (tag.Tags.Count > 0)
-                    FillUserDefinedTypes(tag.Tags);
             }
+
+            if (tag.Tags.Count > 0)
+                FillUserDefinedTypes(tag.Tags);
         }
     }
     #endregion
@@ -377,7 +434,7 @@ public sealed partial class ParserService : IParserService
 
     #region UserDefinedTypePropertiesRegex
     [GeneratedRegex(
-        @"TYPE\s+""(?<typeName>[^""]+)""\s+VERSION\s*:\s*(?<version>[\d.]+)\s+STRUCT\s+(?<fields>.*?)\s+END_STRUCT;\s*END_TYPE",
+        @"^( {4})?TYPE (?<typeName>.*?)\r?\n^VERSION : (?<version>.*?)\r?\n^ {3}STRUCT\r?\n^(?<fields>.*?)^ {3}END_STRUCT;\r?\n^END_TYPE",
         RegexOptions.Multiline | RegexOptions.Singleline | RegexOptions.Compiled
     )]
     private static partial Regex UserDefinedTypePropertiesRegex();
@@ -385,8 +442,8 @@ public sealed partial class ParserService : IParserService
 
     #region NormalDataBlockPropertiesRegex
     [GeneratedRegex(
-        @"^DATA_BLOCK\s+""(?<name>\w+)""\s*{[^}]*}\s*VERSION\s*:\s*(?<version>[\d.]+)\s*(NON_RETAIN)?\s*(STRUCT)\s*(?<fields>.*?)\s*(END_STRUCT;\s*BEGIN)",
-        RegexOptions.Multiline | RegexOptions.Singleline | RegexOptions.Compiled
+        @"^DATA_BLOCK (?<name>.*?)\r?\n^VERSION : (?<version>.*?)\r?\n^(NON_RETAIN\r?\n)?^ {3}(STRUCT) \r?\n(?<fields>.*?)\r?\n {3}END_STRUCT;",
+        RegexOptions.Multiline | RegexOptions.Singleline
     )]
     private static partial Regex NormalDataBlockPropertiesRegex();
     #endregion
@@ -394,7 +451,7 @@ public sealed partial class ParserService : IParserService
     #region UserDefinedTypeDataBlockPropertiesRegex
 
     [GeneratedRegex(
-        @"^DATA_BLOCK\s+""(?<name>\w+)""\s*{[^}]*}\s*VERSION\s*:\s*(?<version>[\d.]+)\s*""?(?<type>\w+)""?",
+        @"^DATA_BLOCK (?<name>\w+)\r?\nVERSION : (?<version>[\d.]+)\r?\n?(NON_RETAIN\r?\n)?(?<type>\w+)\r?\nBEGIN\r?\nEND_DATA_BLOCK\r?\n",
         RegexOptions.Multiline | RegexOptions.Singleline | RegexOptions.Compiled
     )]
     private static partial Regex UserDefinedTypeDataBlockPropertiesRegex();
@@ -403,7 +460,7 @@ public sealed partial class ParserService : IParserService
 
     #region TagPropertiesRegex
     [GeneratedRegex(
-        @"(^\s*(?<structname>\w+)\s*:\s*Struct(?<structfields>.*)\s*END_STRUCT;)|(^\s*""?(?<varname>\w+)""?\s*({.*?}\s*)?\s*:\s*(?<vartype>.*?);)",
+        @"(^(?<spaces> +)(?<structname>[\w\d-]*)  ?: Struct\r?\n^(?<structfields>.*?)^\k<spaces>END_STRUCT;)|(^ +(?<varname>[\w\d-]*)  ?: (?<vartype>.*?);)",
         RegexOptions.Multiline | RegexOptions.Singleline | RegexOptions.Compiled
     )]
     private static partial Regex TagPropertiesRegex();

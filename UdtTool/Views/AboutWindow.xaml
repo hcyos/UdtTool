@@ -20,7 +20,7 @@
             <TextBlock HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        FontSize="24"
-                       Text="版本 1.0.0" />
+                       Text="{Binding Version, StringFormat='版本：{0}'}" />
             <TextBlock HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        FontSize="24"

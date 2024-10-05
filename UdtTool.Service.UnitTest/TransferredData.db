@@ -1,0 +1,32 @@
+﻿    TYPE "typeXyz"
+VERSION : 0.1
+   STRUCT
+      X : Int;
+      Y : Int;
+      Z : Int;
+   END_STRUCT;
+
+END_TYPE
+
+TYPE "typeTransferredData"
+VERSION : 0.1
+   STRUCT
+      PcToLine : "typeXyz";
+      LineToPc : "typeXyz";
+      LineDataUpdated { S7_SetPoint := 'True'} : Int;
+      PcDataUpdated : Int;
+      Paper : Int;
+   END_STRUCT;
+
+END_TYPE
+
+DATA_BLOCK "TransferredData"
+{ S7_Optimized_Access := 'FALSE' }
+VERSION : 0.1
+NON_RETAIN
+"typeTransferredData"
+
+BEGIN
+
+END_DATA_BLOCK
+

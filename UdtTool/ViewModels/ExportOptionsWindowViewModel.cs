@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MvvmDialogs;
@@ -29,10 +30,10 @@ namespace UdtTool.ViewModels
         #region Path Property
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(OkCommand))]
-        private string? path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+        private string? path;
         #endregion
 
-        #region OkCommand Command
+        #region SelectPathCommand Command
         [RelayCommand]
         private void SelectPath()
         {
@@ -48,7 +49,9 @@ namespace UdtTool.ViewModels
                 Path = settings.FileName;
             }
         }
+        #endregion
 
+        #region OkCommand Command
         [RelayCommand(CanExecute = nameof(CanOk))]
         private void Ok()
         {
